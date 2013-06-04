@@ -1,0 +1,1 @@
+cmd_drivers/clocksource/built-in.o :=  /home/me/ARM_codebench/bin/arm-none-linux-gnueabi-ld -EL    -r -o drivers/clocksource/built-in.o drivers/clocksource/mmio.o drivers/clocksource/clksrc-dbx500-prcmu.o 

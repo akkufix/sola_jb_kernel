@@ -1,0 +1,1 @@
+cmd_drivers/char/built-in.o :=  /home/me/ARM_codebench/bin/arm-none-linux-gnueabi-ld -EL    -r -o drivers/char/built-in.o drivers/char/mem.o drivers/char/random.o drivers/char/misc.o drivers/char/shrm_char.o 
