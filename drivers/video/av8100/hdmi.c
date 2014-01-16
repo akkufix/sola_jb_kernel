@@ -2469,3 +2469,4 @@ void hdmi_exit(void)
 	/* Free device data */
 	kfree(hdev);
 }
+

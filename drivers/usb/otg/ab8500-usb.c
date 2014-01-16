@@ -416,7 +416,7 @@ static int ab8500_usb_link_status_update(struct ab8500_usb *ab,
 
 	dev_dbg(ab->dev, "ab8500_usb_link_status_update %d\n", lsts);
 	if (((ab->RIDA) && (lsts == 1)) || ((ab->RIDA) && (lsts == 2)))
-		return;
+		return 0;
 	switch (lsts) {
 	case USB_LINK_ACA_RID_B_8500:
 		event = USB_EVENT_RIDB;
@@ -508,6 +508,8 @@ static int ab8500_usb_link_status_update(struct ab8500_usb *ab,
 		atomic_notifier_call_chain(&ab->otg.notifier,
 					event,
 					&ab->vbus_draw);
+		break;
+	case USB_LINK_RESERVED_8500:
 		break;
 	}
 	ab->prevous_link_status_state = lsts;

@@ -903,3 +903,4 @@ module_exit(rmi4_spi_adapter_exit);
 MODULE_AUTHOR("Joachim Holst <joachim.holst@sonyerisson.com>");
 MODULE_DESCRIPTION("RMI4 spi adapter");
 MODULE_LICENSE("GPL");
+

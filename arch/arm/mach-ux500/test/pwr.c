@@ -6,9 +6,12 @@
  * License terms: GNU General Public License (GPL) version 2
  *
  * This is a module test for clocks and regulators.
+ *
+ * Modified by Munjeni @ XDA Developers 2013
  */
 
 #include <linux/module.h>
+#include <linux/init.h>
 #include <linux/debugfs.h>
 #include <linux/delay.h>
 #include <linux/seq_file.h>
@@ -25,8 +28,8 @@
 #include <mach/pm.h>
 
 #include "../pm/suspend_dbg.h"
-#include "../../../drivers/regulator/dbx500-prcmu.h"
-#include "../../../drivers/regulator/ab8500-debug.h"
+#include "../../../../drivers/regulator/dbx500-prcmu.h"
+#include "../../../../drivers/regulator/ab8500-debug.h"
 
 /* To reach main_wake_lock */
 #include "../../../../kernel/power/power.h"
@@ -791,7 +794,9 @@ static ssize_t pm_test_suspend_set(struct file *file,
 {
 	long unsigned val;
 	int err;
-
+#ifdef CONFIG_WAKELOCK
+	struct wake_lock main_wake_lock;
+#endif
 	err = kstrtoul_from_user(user_buf, count, 0, &val);
 
 	if (err)
@@ -875,6 +880,8 @@ static int __init pwr_test_init(void)
 	int err = 0;
 	void *err_ptr;
 
+	printk ("Loaded pwr test module.\n");
+
 	debugfs_dir = debugfs_create_dir("pwr_test", NULL);
 	if (IS_ERR(debugfs_dir))
 		return PTR_ERR(debugfs_dir);
@@ -899,7 +906,20 @@ static int __init pwr_test_init(void)
 
 	return 0;
 out:
+	printk ("pwr test error!\n");
 	debugfs_remove_recursive(debugfs_dir);
 	return err;
 }
-late_initcall(pwr_test_init);
+
+static void __exit pwr_test_exit(void)
+{
+	printk ("Unloaded pwr test module.\n");
+	debugfs_remove_recursive(debugfs_dir);
+
+	return;
+}
+
+module_init(pwr_test_init);
+module_exit(pwr_test_exit);
+
+MODULE_LICENSE("GPL v2");

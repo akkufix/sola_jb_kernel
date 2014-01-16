@@ -566,3 +566,4 @@ u8 av8100_ver_get(void);
 bool av8100_encryption_ongoing(void);
 
 #endif /* __AV8100__H__ */
+

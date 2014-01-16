@@ -119,6 +119,7 @@ static int lowmem_shrink(struct shrinker *s, struct shrink_control *sc)
 	if (sc->nr_to_scan <= 0 || min_score_adj == OOM_SCORE_ADJ_MAX + 1) {
 		lowmem_print(5, "lowmem_shrink %lu, %x, return %d\n",
 			     sc->nr_to_scan, sc->gfp_mask, rem);
+
 		return rem;
 	}
 	selected_oom_score_adj = min_score_adj;
@@ -198,9 +199,18 @@ static int lowmem_shrink(struct shrinker *s, struct shrink_control *sc)
 			     p->pid, p->comm, oom_score_adj, tasksize);
 	}
 	if (selected) {
-		lowmem_print(1, "send sigkill to %d (%s), adj %d, size %d\n",
-			     selected->pid, selected->comm,
-			     selected_oom_score_adj, selected_tasksize);
+		lowmem_print(1, "send sigkill to %d (%s), adj %d,\n"
+				"   to free %ldkB on behalf of '%s' (%d) because\n"
+				"   cache %ldkB is below limit %ldkB for oom_score_adj %d\n"
+				"   Free memory is %ldkB above reserved\n",
+				 selected->pid, selected->comm,
+				 selected_oom_score_adj,
+				 selected_tasksize * (long)(PAGE_SIZE / 1024),
+				 current->comm, current->pid,
+				 other_file * (long)(PAGE_SIZE / 1024),
+				 lowmem_minfree[i] * (long)(PAGE_SIZE / 1024),
+				 min_score_adj,
+				 other_free * (long)(PAGE_SIZE / 1024));
 		send_sig(SIGKILL, selected, 0);
 
 		lowmem_deathpending_timeout = ktime_add_ns(ktime_get(),

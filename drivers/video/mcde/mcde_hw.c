@@ -9,6 +9,8 @@
  * License terms: GNU General Public License (GPL), version 2.
  */
 
+//#define DEBUG
+
 #include <linux/kernel.h>
 #include <linux/device.h>
 #include <linux/platform_device.h>

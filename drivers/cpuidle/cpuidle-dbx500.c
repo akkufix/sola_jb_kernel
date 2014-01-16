@@ -21,6 +21,7 @@
 #include <mach/pm.h>
 #include <mach/pm-timer.h>
 #include <mach/context.h>
+#include <mach/id.h>
 
 #include <plat/mtu.h>
 
@@ -583,13 +584,20 @@ static int enter_sleep(struct cpuidle_device *dev,
 	}
 
 	ux500_ci_dbg_log(target, time_enter);
-
+#ifdef CONFIG_CRASH_DUMP
 	ux500_ci_dbg_log_post_mortem(target,
 				     time_enter,
 				     est_wake_time,
 				     state->sched_wake_up,
 				     rtcrtt_program_time,
 				     master);
+#else
+	ux500_ci_dbg_log_post_mortem(time_enter,
+				     est_wake_time,
+				     state->sched_wake_up,
+				     rtcrtt_program_time,
+				     master);
+#endif
 
 	if (master && cstates[target].ARM != ARM_ON)
 		prcmu_set_power_state(cstates[target].pwrst,
@@ -724,8 +732,12 @@ static int __init cpuidle_driver_init(void)
 	int cpu;
 
 	/* Configure wake up reasons */
-	prcmu_enable_wakeups(PRCMU_WAKEUP(ARM) | PRCMU_WAKEUP(RTC) |
-			     PRCMU_WAKEUP(ABB));
+	/*if (cpu_is_u9500())
+		prcmu_enable_wakeups(PRCMU_WAKEUP(ARM) | PRCMU_WAKEUP(RTC) |
+				     PRCMU_WAKEUP(ABB) | PRCMU_WAKEUP(HSI0));
+	else*/
+		prcmu_enable_wakeups(PRCMU_WAKEUP(ARM) | PRCMU_WAKEUP(RTC) |
+				     PRCMU_WAKEUP(ABB));
 
 	ux500_ci_dbg_init();
 

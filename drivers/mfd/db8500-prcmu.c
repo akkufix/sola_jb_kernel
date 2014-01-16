@@ -439,6 +439,7 @@ static DEFINE_SPINLOCK(clkout_lock);
 
 /* Global var to runtime determine TCDM base for v2 or v1 */
 static __iomem void *tcdm_base;
+__iomem void *tcdm_base_bkp;
 
 struct clk_mgt {
 	void __iomem *reg;
@@ -637,6 +638,7 @@ u32 db8500_prcmu_read(unsigned int reg)
 {
 	return readl(_PRCMU_BASE + reg);
 }
+EXPORT_SYMBOL(db8500_prcmu_read);
 
 void db8500_prcmu_write(unsigned int reg, u32 value)
 {
@@ -2125,7 +2127,7 @@ int prcmu_abb_write_masked(u8 slave, u8 reg, u8 *value, u8 *mask, u8 size)
 
 	if (!wait_for_completion_timeout(&mb5_transfer.work,
 				PRCMU_COMM_TOUT)) {
-		pr_err("prcmu: %s timed out (%s ms) waiting for a reply.\n",
+		pr_err("prcmu: %s timed out (%d ms) waiting for a reply.\n",
 			__func__, PRCMU_COMM_TOUT_MS);
 		r = -EIO;
 		db8500_prcmu_debug_dump(__func__, true, false);
@@ -2653,6 +2655,7 @@ void __init db8500_prcmu_early_init(void)
 	}
 
 	tcdm_base = __io_address(U8500_PRCMU_TCDM_BASE);
+	tcdm_base_bkp = __io_address(U8500_PRCMU_TCDM_BASE);
 
 	spin_lock_init(&mb0_transfer.lock);
 	spin_lock_init(&mb0_transfer.dbb_irqs_lock);

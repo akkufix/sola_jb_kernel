@@ -547,3 +547,4 @@ module_init(av8100_codec_platform_drv_init);
 module_exit(av8100_codec_platform_drv_exit);
 
 MODULE_LICENSE("GPL v2");
+

@@ -3,7 +3,8 @@
  * Show Logo in RLE 565 format
  *
  * Copyright (C) 2008 Google Incorporated
- * Copyright (C) 2012 Sony Mobile Communications AB.
+ *
+ * Fix boot logo for ICS on Xperia devices by Munjeni 2012
  *
  * This software is licensed under the terms of the GNU General Public
  * License version 2, as published by the Free Software Foundation, and
@@ -46,6 +47,22 @@ static void memset32(void *_ptr, unsigned int val, unsigned count)
 	count >>= 2;
 	while (count--)
 		*ptr++ = val;
+}
+
+static unsigned int rle_to_rgba888(unsigned int in)
+{
+	unsigned int widepixel, red, green, blue, alpha;
+
+	widepixel = ((in >> 11) & 0x1F);
+	red = (widepixel << 3) | (widepixel >> 2);
+	widepixel = ((in >> 5) & 0x3F);
+	green = (widepixel << 2) | (widepixel >> 4);
+	widepixel = (in & 0x1F);
+	blue = (widepixel << 3) | (widepixel >> 2);
+	alpha = 0xff;
+	widepixel = (alpha << 24) | (red << 16)| (green << 8) | (blue);
+
+	return widepixel;
 }
 
 /* 565RLE image format: [count(2 bytes), rle(2 bytes)] */
@@ -109,14 +126,8 @@ static int load_565rle_image(char *filename)
 			if (fb_depth(info) == 2) {
 				memset16(bits, ptr[1], j << 1);
 			} else {
-				/* Should probably add check for framebuffer
-				 * format here*/
-				unsigned int widepixel = ptr[1];
-				widepixel = (widepixel & 0xf800) << (19-11) |
-					(widepixel & 0x07e0) << (10-5) |
-					(widepixel & 0x001f) << (3-0) |
-					0xff000000; /* Set alpha channel*/
-				memset32(bits, widepixel, j << 2);
+				unsigned int widepixel = rle_to_rgba888(ptr[1]);
+				memset32((unsigned int *)bits, widepixel, j << 2);
 			}
 			bits += j * fb_depth(info);
 			line_pos += j;

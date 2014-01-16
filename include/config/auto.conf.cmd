@@ -94,6 +94,7 @@ deps_config := \
 	drivers/clk/Kconfig \
 	drivers/platform/x86/Kconfig \
 	drivers/platform/Kconfig \
+	drivers/staging/snappy/Kconfig \
 	drivers/staging/taos/Kconfig \
 	drivers/staging/pasr/Kconfig \
 	drivers/staging/camera_flash/Kconfig \
