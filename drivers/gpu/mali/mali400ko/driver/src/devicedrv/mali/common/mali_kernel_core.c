@@ -609,10 +609,6 @@ _mali_osk_errcode_t mali_initialize_subsystems(void)
 	}
 #endif
 
-		/* Initialize the power management module */
-	err = mali_pm_initialize();
-	if (_MALI_OSK_ERR_OK != err) goto pm_init_failed;
-
 	/* Get data from config.h */
 	err = _mali_osk_resources_init(&arch_configuration, &num_resources);
 	if (_MALI_OSK_ERR_OK != err) goto osk_resources_init_failed;
@@ -635,7 +631,9 @@ _mali_osk_errcode_t mali_initialize_subsystems(void)
 
 	is_pmu_enabled = mali_pmu_get_global_pmu_core() != NULL ? MALI_TRUE : MALI_FALSE;
 
-
+	/* Initialize the power management module */
+	err = mali_pm_initialize();
+	if (_MALI_OSK_ERR_OK != err) goto pm_init_failed;
 
 	/* Make sure the power stays on for the rest of this function */
 	mali_pm_always_on(MALI_TRUE);

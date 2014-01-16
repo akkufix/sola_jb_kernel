@@ -35,3 +35,24 @@ config MALI400_GPU_UTILIZATION
 	---help---
 	  This enables gathering and processing of the utilization of Mali GPU.
 	  This data can be used as a basis to change GPU operating frequency.
+
+config USING_PMM
+        bool "Enable Power Management"
+        depends on MALI400MP
+        default n
+        ---help---
+                This enables for Mali Power Management.
+
+config USING_MALI_PMM_TESTSUITE
+        bool "Power Management Test Suite"
+        depends on MALI400MP
+        default n
+        ---help---
+                This enables Power management Test Suite.
+
+config USING_MMU
+        bool "Using MMU"
+        depends on MALI400MP
+        default n
+        ---help--- 
+                This enables MMU for Mali. Required hardware support for MMU.

@@ -2947,6 +2947,15 @@ static struct ux500_wdt_ops db8500_wdt_ops = {
 	.config = config_a9wdog,
 };
 
+/*
+ * Thermal Sensor
+ */
+static struct dbx500_temp_ops db8500_temp_ops;
+
+static struct dbx500_temp_pdata db8500_temp_pdata = {
+	.ops = &db8500_temp_ops,
+};
+
 static struct mfd_cell db8500_prcmu_devs[] = {
 	{
 		.name = "db8500-prcmu-regulators",

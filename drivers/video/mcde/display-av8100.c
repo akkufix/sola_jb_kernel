@@ -1629,4 +1629,3 @@ module_exit(mcde_display_hdmi_exit);
 MODULE_AUTHOR("Per Persson <per.xb.persson@stericsson.com>");
 MODULE_LICENSE("GPL");
 MODULE_DESCRIPTION("ST-Ericsson hdmi display driver");
-

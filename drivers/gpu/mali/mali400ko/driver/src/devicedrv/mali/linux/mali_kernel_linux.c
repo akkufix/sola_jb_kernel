@@ -120,8 +120,11 @@ static int __init mali_driver_init(void)
 	MALI_DEBUG_PRINT(2, ("Compiled: %s, time: %s.\n", __DATE__, __TIME__));
 	MALI_DEBUG_PRINT(2, ("Driver revision: %s\n", SVN_REV_STRING));
 
-	return platform_driver_register(&mali_plat_driver);
+	ret = _mali_dev_platform_register();
+	if (0 != ret) goto platform_register;
 
+platform_register:
+	return platform_driver_register(&mali_plat_driver);
 }
 
 int init_mali(void)
@@ -156,7 +159,7 @@ platform_init_failed:
 	terminate_kernel_device();
 initialize_kernel_device_failed:
 	_mali_dev_platform_unregister();
-platform_register_failed:
+
 	return ret;
 }
 

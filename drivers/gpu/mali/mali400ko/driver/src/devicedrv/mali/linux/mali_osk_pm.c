@@ -40,7 +40,7 @@ static mali_bool have_runtime_reference = MALI_FALSE;
 void _mali_osk_pm_dev_enable(void)
 {
 #ifdef CONFIG_PM_RUNTIME
-  //pm_runtime_enable(&(mali_gpu_device.dev));
+	pm_runtime_enable(&(mali_gpu_device.dev));
 #endif
 }
 
@@ -51,7 +51,7 @@ _mali_osk_errcode_t _mali_osk_pm_dev_idle(void)
 	if (MALI_TRUE == have_runtime_reference)
 	{
 		int err;
-		//	err = pm_runtime_put_sync(&(mali_gpu_device.dev));
+		err = pm_runtime_put_sync(&(mali_gpu_device.dev));	
 		if (0 > err)
 		{
 			MALI_PRINT_ERROR(("OSK PM: pm_runtime_put_sync() returned error code %d\n", err));	
@@ -70,7 +70,7 @@ _mali_osk_errcode_t _mali_osk_pm_dev_activate(void)
 	if (MALI_TRUE != have_runtime_reference)
 	{
 		int err;
-		//err = pm_runtime_get_sync(&(mali_gpu_device.dev));
+		err = pm_runtime_get_sync(&(mali_gpu_device.dev));
 		if (0 > err)
 		{
 			MALI_PRINT_ERROR(("OSK PM: pm_runtime_get_sync() returned error code %d\n", err));	

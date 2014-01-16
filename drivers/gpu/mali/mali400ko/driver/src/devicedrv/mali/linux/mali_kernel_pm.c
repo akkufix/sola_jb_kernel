@@ -121,7 +121,12 @@ static struct notifier_block mali_pwr_notif_block =
 static void _mali_release_pm(struct device *device)
 {
 }
-struct platform_device mali_gpu_device;
+struct platform_device mali_gpu_device =
+{
+	.name = "mali",
+	.id = 0,
+	.dev.release = _mali_release_pm
+};
 
 /** This function is called when the device is probed */
 static int mali_probe(struct platform_device *pdev)
@@ -132,7 +137,7 @@ static int mali_probe(struct platform_device *pdev)
 static int mali_remove(struct platform_device *pdev)
 {
 #ifdef CONFIG_PM_RUNTIME
-  //pm_runtime_disable(&pdev->dev);
+	pm_runtime_disable(&pdev->dev);
 #endif
 	return 0;
 }

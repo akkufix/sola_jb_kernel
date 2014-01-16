@@ -86,10 +86,10 @@ static int meminfo_proc_show(struct seq_file *m, void *v)
 		"SReclaimable:   %8lu kB\n"
 		"SUnreclaim:     %8lu kB\n"
 		"KernelStack:    %8lu kB\n"
-		"PageTables:     %8lu kB\n"
 #ifdef CONFIG_UKSM
-	"KsmZeroPages:   %8lu kB\n"
+		"KsmZeroPages:   %8lu kB\n"
 #endif
+		"PageTables:     %8lu kB\n"
 #ifdef CONFIG_QUICKLIST
 		"Quicklists:     %8lu kB\n"
 #endif
@@ -134,12 +134,13 @@ static int meminfo_proc_show(struct seq_file *m, void *v)
 		K(i.freeswap),
 		K(global_page_state(NR_FILE_DIRTY)),
 		K(global_page_state(NR_WRITEBACK)),
-		K(global_page_state(NR_ANON_PAGES)
 #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+		K(global_page_state(NR_ANON_PAGES)
 		  + global_page_state(NR_ANON_TRANSPARENT_HUGEPAGES) *
-		  HPAGE_PMD_NR
+		  HPAGE_PMD_NR),
+#else
+		K(global_page_state(NR_ANON_PAGES)),
 #endif
-		  ),
 		K(global_page_state(NR_FILE_MAPPED)),
 		K(global_page_state(NR_SHMEM)),
 		K(global_page_state(NR_SLAB_RECLAIMABLE) +
@@ -147,10 +148,10 @@ static int meminfo_proc_show(struct seq_file *m, void *v)
 		K(global_page_state(NR_SLAB_RECLAIMABLE)),
 		K(global_page_state(NR_SLAB_UNRECLAIMABLE)),
 		global_page_state(NR_KERNEL_STACK) * THREAD_SIZE / 1024,
-		K(global_page_state(NR_PAGETABLE)),
 #ifdef CONFIG_UKSM
 		K(global_page_state(NR_UKSM_ZERO_PAGES)),
 #endif
+		K(global_page_state(NR_PAGETABLE)),
 #ifdef CONFIG_QUICKLIST
 		K(quicklist_total_size()),
 #endif

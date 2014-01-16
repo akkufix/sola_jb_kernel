@@ -621,13 +621,15 @@ static int __devexit barometer_remove(struct i2c_client *client)
 	return 0;
 }
 
-static int barometer_resume(struct device *dev)
+/* static int barometer_resume(struct device *dev)
+
+
 {
 	struct i2c_client *client = to_i2c_client(dev);
 	struct barometer_data *barom = i2c_get_clientdata(client);
 
 	if (barom->enabled) {
-		err = barometer_enable(barom);
+	err = barometer_enable(barom);	
 		if (err < 0)
 			dev_err(barom->dev, "%s: barometer enable failed\n",
 			__func__);
@@ -650,23 +652,23 @@ static int barometer_suspend(struct device *dev)
 
 	return 0;
 }
-
+ */
 static const struct i2c_device_id barometer_id[] = {
 	{"lps331ap", 0},
 	{},
 };
-
+/*
 MODULE_DEVICE_TABLE(i2c, barometer_id);
 static const struct dev_pm_ops barometer_pm_ops = {
 	.suspend	= barometer_suspend,
 	.resume		= barometer_resume,
 };
-
+ */
 static struct i2c_driver barometer_driver = {
 	.driver = {
 		.name	= "lps331ap",
 		.owner	= THIS_MODULE,
-		.pm	= &barometer_pm_ops,
+	/*	.pm	= &barometer_pm_ops, */
 	},
 	.probe		= barometer_probe,
 	.remove		= __devexit_p(barometer_remove),

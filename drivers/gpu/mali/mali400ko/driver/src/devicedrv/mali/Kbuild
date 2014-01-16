@@ -19,13 +19,12 @@ TARGET_PLATFORM = $(CONFIG)
 ARCH = arm
 USING_MMU = 1
 USING_PMM = 1
-USING_MALI_RUN_TIME_PM = 0
+USING_MALI_RUN_TIME_PM = 1
 USING_UMP = 1
 USING_HWMEM = 1
 USING_OS_MEMORY = 1
 USING_GPU_UTILIZATION = 1
 USING_PROFILING = 0
-
 
 # set up defaults if not defined by the user
 USING_UMP ?= 0
@@ -121,7 +120,7 @@ MALI_PLATFORM_FILE = platform/default/mali_platform.c
 endif
 
 # Get subversion revision number, fall back to only ${MALI_RELEASE_NAME} if no svn info is available
-SVN_REV :=1
+SVN_REV :=r3p2_01
 ifeq ($(SVN_REV),)
 SVN_REV := $(MALI_RELEASE_NAME)
 else
